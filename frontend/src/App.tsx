@@ -3,7 +3,7 @@ import UploadCSV from "./components/UploadCSV";
 import SensorDataView from "./components/SensorDataView";
 import SensorChart from "./components/SensorChart";
 import AddSensorData from "./components/AddSensorData";
-import "./App.css"; // Importe o CSS
+import "./App.css";
 
 const App: React.FC = () => {
   return (

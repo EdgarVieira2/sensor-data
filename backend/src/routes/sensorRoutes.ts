@@ -10,9 +10,9 @@ import {
 const router = Router();
 const upload = multer({ dest: "uploads/" });
 
-router.get("/data", getSensorData); // Rota para obter todos os dados
-router.post("/data", receiveSensorData); // Rota para enviar dados em tempo real
-router.post("/upload", upload.single("file"), uploadSensorDataCSV); // Rota para fazer upload de CSV
-router.get("/average", getAverageSensorData); // Rota para obter a média dos dados
+router.get("/data", getSensorData);
+router.post("/data", receiveSensorData);
+router.post("/upload", upload.single("file"), uploadSensorDataCSV);
+router.get("/average", getAverageSensorData);
 
 export default router;

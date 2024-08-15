@@ -27,7 +27,6 @@ const SensorDataView: React.FC = () => {
     fetchData();
   }, []);
 
-  // Calcular os dados da página atual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentData = sensorData.slice(indexOfFirstItem, indexOfLastItem);

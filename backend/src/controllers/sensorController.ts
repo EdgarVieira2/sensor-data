@@ -3,9 +3,7 @@ import { prisma } from "../index";
 import multer from "multer";
 import csv from "csv-parser";
 import fs from "fs";
-import path from "path";
 
-// Configuração do multer para upload de arquivos
 const upload = multer({ dest: "uploads/" });
 
 export const receiveSensorData = async (req: Request, res: Response) => {
@@ -14,17 +12,15 @@ export const receiveSensorData = async (req: Request, res: Response) => {
   try {
     const { equipmentId, timestamp, value } = req.body;
 
-    // Garantir que o equipmentId existe na tabela Equipment
     const equipment = await prisma.equipment.upsert({
       where: { equipmentId },
-      update: {}, // Se o equipamento já existe, não precisa fazer nada
-      create: { equipmentId }, // Se não existir, criar
+      update: {},
+      create: { equipmentId },
     });
 
-    // Agora, o equipamentoId já deve existir, e podemos inserir em SensorData
     const data = await prisma.sensorData.create({
       data: {
-        equipmentId: equipment.equipmentId, // Certifique-se de usar equipmentId aqui
+        equipmentId: equipment.equipmentId,
         timestamp: new Date(timestamp),
         value,
       },
@@ -38,7 +34,6 @@ export const receiveSensorData = async (req: Request, res: Response) => {
   }
 };
 
-// Obtém todos os dados de sensores
 export const getSensorData = async (req: Request, res: Response) => {
   try {
     const sensorData = await prisma.sensorData.findMany({
@@ -84,7 +79,7 @@ export const uploadSensorDataCSV = async (req: Request, res: Response) => {
 
           await prisma.sensorData.create({
             data: {
-              equipmentId: equipmentId, // Use diretamente o equipmentId fornecido
+              equipmentId: equipmentId,
               timestamp: new Date(timestamp),
               value: parseFloat(value),
             },
@@ -120,10 +115,8 @@ export const getAverageSensorData = async (req: Request, res: Response) => {
   }
 
   try {
-    // Obter todos os dados de sensores
     const allSensorData = await prisma.sensorData.findMany();
 
-    // Filtrar os dados para obter apenas aqueles dentro do período especificado
     const filteredData = allSensorData.filter(
       (data) => new Date(data.timestamp) >= startDate
     );
@@ -137,7 +130,6 @@ export const getAverageSensorData = async (req: Request, res: Response) => {
       return acc;
     }, {} as Record<string, { total: number; count: number }>);
 
-    // Formatar os dados para envio ao frontend
     const formattedData = Object.keys(averages).map((equipmentId) => ({
       equipmentId,
       _avg: {
